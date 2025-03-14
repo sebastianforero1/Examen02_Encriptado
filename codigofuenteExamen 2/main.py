@@ -12,6 +12,7 @@ from streamlit_autorefresh import st_autorefresh
 from cryptography.fernet import Fernet
 import base64
 import json
+import os
 
 st.set_page_config(page_title="Examen 2 IoT", layout="wide")
 st.title("🌡️ Examen 2: Internet de las Cosas: TEMA - End Devices")
@@ -19,8 +20,8 @@ app = Flask(__name__)
 data_lock = threading.Lock()
 data_path = "data.xlsx"
 
-# Clave de cifrado compartida con el ESP32 (DEBE SER LA MISMA en ambos lados)
-KEY = b'abcdefghijklmnopqrstuvwxzy1234567='  # Clave de 32 bytes para AES-256
+
+KEY = os.getenv("FERNET_KEY").encode()
 cipher = Fernet(KEY)
 
 # Initialize data
@@ -62,3 +63,8 @@ def update_data():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+# Llave generada ZohCE66Y1IpT6OQzfQpt_OHbv-pPEqzws-xdJcEXxOo=
+#from cryptography.fernet import Fernet
+
+#key = Fernet.generate_key()
+#print(key.decode())  # Copia la clave generada
